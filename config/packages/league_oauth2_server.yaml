@@ -1,0 +1,34 @@
+league_oauth2_server:
+  authorization_server:
+    private_key: '%env(resolve:OAUTH_PRIVATE_KEY)%'
+    private_key_passphrase: '%env(resolve:OAUTH_PASSPHRASE)%'
+    encryption_key: '%env(resolve:OAUTH_ENCRYPTION_KEY)%'
+    # activation du flux "authorization code grant"
+    enable_auth_code_grant: true
+
+    # activation de la fonctionnalité de renouvellement des jetons
+    enable_refresh_token_grant: true
+
+    # Durée de validité des codes d'autorisation
+    # Ici 10 minutes (P = period / T = time / 10 / M = minute)
+    auth_code_ttl: PT10M
+
+    # Durée de valitidé des jetons d'accès
+    # Ici 1 heure (P = period / T = time / 1 / H = heure)
+    access_token_ttl: PT1H
+
+    # Durée de valitidé des jetons de renouvellement
+    # Ici 1 mois (P = period / 1 / M = month)
+    refresh_token_ttl: P1M
+  resource_server:
+    public_key: '%env(resolve:OAUTH_PUBLIC_KEY)%'
+  scopes:
+    available: [ 'email' ]
+    default: [ 'email' ]
+  persistence:
+    doctrine: null
+
+when@test:
+  league_oauth2_server:
+    persistence:
+      in_memory: null
